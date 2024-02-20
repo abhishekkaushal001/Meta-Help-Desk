@@ -2,13 +2,20 @@
 
 import Link from "next/link";
 import { FieldValues, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { newuserSchema } from "../utils/validationSchema";
+import { z } from "zod";
+
+type newUser = z.infer<typeof newuserSchema>;
 
 const RegisterUserPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<newUser>({
+    resolver: zodResolver(newuserSchema),
+  });
 
   const onSubmit = (data: FieldValues) => {
     console.log(data);
@@ -36,6 +43,9 @@ const RegisterUserPage = () => {
               placeholder="Name"
               className="input input-bordered w-full"
             />
+            {errors.name && (
+              <p className="text-sm mt-1 text-red-600">{errors.name.message}</p>
+            )}
           </div>
 
           <div className="pt-3">
@@ -52,6 +62,11 @@ const RegisterUserPage = () => {
               placeholder="Email"
               className="input input-bordered w-full"
             />
+            {errors.email && (
+              <p className="text-sm mt-1 text-red-600">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div className="pt-3">
@@ -68,7 +83,13 @@ const RegisterUserPage = () => {
               placeholder="Password"
               className="input input-bordered w-full"
             />
+            {errors.password && (
+              <p className="text-sm mt-1 text-red-600">
+                {errors.password.message}
+              </p>
+            )}
           </div>
+
           <div className="flex pt-3 space-x-2">
             <input type="checkbox" id="rememberMe" />
             <label htmlFor="rememberMe">Rememer me</label>
