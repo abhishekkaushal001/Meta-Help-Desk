@@ -1,14 +1,27 @@
+"use client";
+
 import Link from "next/link";
-import React from "react";
+import { FieldValues, useForm } from "react-hook-form";
 
 const RegisterUserPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data: FieldValues) => {
+    console.log(data);
+  };
+
   return (
     <div className="flex h-screen place-items-center justify-center align-middle">
       <div className="bg-white py-10 px-12 rounded-2xl flex flex-col">
         <h2 className="text-center text-xl font-bold py-3 px-20">
           Create Account
         </h2>
-        <form className="form-control pt-3">
+
+        <form className="pt-3" onSubmit={handleSubmit(onSubmit)}>
           <div className="">
             <label
               className="label font-medium text-base py-[2px]"
@@ -17,6 +30,7 @@ const RegisterUserPage = () => {
               Name
             </label>
             <input
+              {...register("name")}
               type="text"
               id="name"
               placeholder="Name"
@@ -32,6 +46,7 @@ const RegisterUserPage = () => {
               Email
             </label>
             <input
+              {...register("email")}
               type="email"
               id="email"
               placeholder="Email"
@@ -47,6 +62,7 @@ const RegisterUserPage = () => {
               Password
             </label>
             <input
+              {...register("password")}
               type="password"
               id="password"
               placeholder="Password"
@@ -58,7 +74,9 @@ const RegisterUserPage = () => {
             <label htmlFor="rememberMe">Rememer me</label>
           </div>
 
-          <button className="btn btn-primary mt-7">Sign Up</button>
+          <button type="submit" className="btn btn-primary w-full mt-7">
+            Sign Up
+          </button>
 
           <p className="text-sm font-medium text-center mt-7">
             Already have an account?{" "}
