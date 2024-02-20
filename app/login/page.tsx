@@ -3,18 +3,18 @@
 import Link from "next/link";
 import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { newUserSchema } from "../utils/validationSchema";
+import { userLoginSchema } from "../utils/validationSchema";
 import { z } from "zod";
 
-type newUser = z.infer<typeof newUserSchema>;
+type user = z.infer<typeof userLoginSchema>;
 
-const RegisterUserPage = () => {
+const LoginUserPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<newUser>({
-    resolver: zodResolver(newUserSchema),
+  } = useForm<user>({
+    resolver: zodResolver(userLoginSchema),
   });
 
   const onSubmit = (data: FieldValues) => {
@@ -24,30 +24,11 @@ const RegisterUserPage = () => {
   return (
     <div className="flex h-screen place-items-center justify-center align-middle">
       <div className="bg-white py-10 px-12 rounded-2xl flex flex-col">
-        <h2 className="text-center text-xl font-bold py-3 px-24">
-          Create Account
+        <h2 className="text-center text-xl font-bold py-3 px-20">
+          Login to your account
         </h2>
 
         <form className="pt-3" onSubmit={handleSubmit(onSubmit)}>
-          <div className="">
-            <label
-              className="label font-medium text-base py-[2px]"
-              htmlFor="name"
-            >
-              Name
-            </label>
-            <input
-              {...register("name")}
-              type="text"
-              id="name"
-              placeholder="Name"
-              className="input input-bordered w-full"
-            />
-            {errors.name && (
-              <p className="text-sm mt-1 text-red-600">{errors.name.message}</p>
-            )}
-          </div>
-
           <div className="pt-3">
             <label
               className="label font-medium text-base py-[2px]"
@@ -80,8 +61,8 @@ const RegisterUserPage = () => {
               {...register("password")}
               type="password"
               id="password"
-              maxLength={50}
               placeholder="Password"
+              maxLength={50}
               className="input input-bordered w-full"
             />
             {errors.password && (
@@ -97,13 +78,13 @@ const RegisterUserPage = () => {
           </div>
 
           <button type="submit" className="btn btn-primary w-full mt-7">
-            Sign Up
+            Login
           </button>
 
           <p className="text-sm font-medium text-center mt-7">
-            Already have an account?{" "}
-            <Link href="/login" className="text-blue-600">
-              Login
+            New to Help-Desk?{" "}
+            <Link href="/register" className="text-blue-600">
+              Sign Up
             </Link>
           </p>
         </form>
@@ -112,4 +93,4 @@ const RegisterUserPage = () => {
   );
 };
 
-export default RegisterUserPage;
+export default LoginUserPage;
