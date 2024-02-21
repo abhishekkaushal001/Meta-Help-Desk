@@ -7,6 +7,7 @@ import { newUserSchema } from "../utils/validationSchema";
 import { z } from "zod";
 import axios, { AxiosError } from "axios";
 import { Toaster, toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 type newUser = z.infer<typeof newUserSchema>;
 
@@ -19,10 +20,15 @@ const RegisterUserPage = () => {
     resolver: zodResolver(newUserSchema),
   });
 
+  const router = useRouter();
+
   const onSubmit = async (data: FieldValues) => {
     try {
       const res = await axios.post("/api/signup", data);
       toast.success(res.data.message);
+      setTimeout(() => {
+        router.push("/login");
+      }, 1500);
     } catch (error) {
       toast.error(`Error: ${error.response.data.error}`);
     }

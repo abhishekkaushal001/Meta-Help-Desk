@@ -34,5 +34,5 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json({ message: "User Successfully created." });
+  return NextResponse.json({ message: "Successfully signed up." });
 }
