@@ -13,8 +13,6 @@ export async function middleware(request: NextRequest) {
     }
   );
 
-  console.log(validate.status);
-
   if (validate.status !== 200) {
     return NextResponse.redirect(new URL("/login", request.nextUrl.origin));
   }
