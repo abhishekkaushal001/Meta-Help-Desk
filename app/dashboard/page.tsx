@@ -62,8 +62,11 @@ const AgentDashboardPage = async () => {
   const pageData = async () => {
     try {
       const res = await axios.get<PageDataType>(
-        `https://graph.facebook.com/me/accounts?access_token=${await getAccesstoken()}`
+        `https://graph.facebook.com/v19.0/me/accounts?access_token=${await getAccesstoken()}`
       );
+
+      process.env.PAGE_ACCESS_TOKEN = res.data.data[0].access_token;
+      process.env.PAGE_ID = res.data.data[0].id;
 
       return res.data;
     } catch (error) {
@@ -100,9 +103,11 @@ const AgentDashboardPage = async () => {
           </Link>
         </div>
 
-        <div className="rounded-full overflow-hidden bg-white w-fit mx-auto p-2 my-5">
-          <FaUser className="w-5 h-5 text-gray-600" />
-        </div>
+        <Link href="/">
+          <div className="rounded-full overflow-hidden bg-white w-fit mx-auto p-2 my-5">
+            <FaUser className="w-5 h-5 text-gray-600" />
+          </div>
+        </Link>
       </aside>
 
       <div className="grid grid-cols-5 w-full">
