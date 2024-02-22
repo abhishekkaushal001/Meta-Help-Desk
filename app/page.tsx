@@ -29,7 +29,7 @@ export default function Home() {
             </h3>
             <div className="mt-5">
               <button className="btn btn-primary w-full mt-5">
-                <Link href={``}>Reply To Messages</Link>
+                <Link href="/dashboard">Reply To Messages</Link>
               </button>
               <button className="btn btn-error w-full mt-5">
                 <Link href="/api/auth/signout">Delete Integration</Link>
