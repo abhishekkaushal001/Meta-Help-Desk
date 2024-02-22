@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import { FieldValues, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { newUserSchema } from "../utils/validationSchema";
-import { z } from "zod";
-import axios, { AxiosError } from "axios";
-import { Toaster, toast } from "react-hot-toast";
+import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { FieldValues, useForm } from "react-hook-form";
+import { Toaster, toast } from "react-hot-toast";
+import { z } from "zod";
+import { newUserSchema } from "../utils/validationSchema";
 
 type newUser = z.infer<typeof newUserSchema>;
 
