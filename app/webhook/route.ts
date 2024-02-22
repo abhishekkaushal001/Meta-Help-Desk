@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   // Check the webhook event is from a Page subscription
   if (body.object === "page") {
     // Iterate over each entry - there may be multiple if batched
-    body.entry.forEach(function (entry) {
+    body.entry.forEach(function (entry: any) {
       // Gets the body of the webhook event
       let webhook_event = entry.messaging[0];
       console.log(webhook_event);
@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
 }
 
 // Handles messages events
-function handleMessage(sender_psid, received_message) {
+function handleMessage(sender_psid: any, received_message: any) {
   let response;
 
   // Check if the message contains text
@@ -101,7 +101,7 @@ function handleMessage(sender_psid, received_message) {
 }
 
 // Handles messaging_postbacks events
-function handlePostback(sender_psid, received_postback) {
+function handlePostback(sender_psid: any, received_postback: any) {
   let response;
 
   // Get the payload for the postback
@@ -118,7 +118,7 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid, response) {
+function callSendAPI(sender_psid: any, response: any) {
   // Construct the message body
   let request_body = {
     recipient: {

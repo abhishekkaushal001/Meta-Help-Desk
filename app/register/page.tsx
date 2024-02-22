@@ -23,15 +23,15 @@ const RegisterUserPage = () => {
   const router = useRouter();
 
   const onSubmit = async (data: FieldValues) => {
-    try {
-      const res = await axios.post("/api/signup", data);
-      toast.success(res.data.message);
-      setTimeout(() => {
-        router.push("/login");
-      }, 1500);
-    } catch (error) {
-      toast.error(`Error: ${error.response.data.error}`);
-    }
+    axios
+      .post("/api/signup", data)
+      .then((res) => {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
+      })
+      .catch((err) => toast.error(`Error: ${err.response.data.error}`));
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Link from "next/link";
 import { FieldValues, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
@@ -23,15 +23,15 @@ const LoginUserPage = () => {
   const router = useRouter();
 
   const onSubmit = async (data: FieldValues) => {
-    try {
-      const res = await axios.post("/api/login", data);
-      toast.success(res.data.message);
-      setTimeout(() => {
-        router.push("/");
-      }, 1500);
-    } catch (error) {
-      toast.error(`Error: ${error.response.data.error}`);
-    }
+    axios
+      .post("/api/login", data)
+      .then((res) => {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          router.push("/");
+        }, 1500);
+      })
+      .catch((err) => toast.error(`Error: ${err.response.data.error}`));
   };
 
   return (
