@@ -1,5 +1,7 @@
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
-import request from "request";
+import { getData } from "./getData";
+import { getServerSession } from "next-auth";
 
 export async function POST(req: NextRequest) {
   let body = await req.json();
@@ -121,29 +123,47 @@ function handlePostback(sender_psid: any, received_postback: any) {
 }
 
 // Sends response messages via the Send API
-function callSendAPI(sender_psid: any, response: any) {
+async function callSendAPI(sender_psid: any, response: any) {
+  // check for the session to send message.
+  const session = await getServerSession();
+  if (!session) {
+    return;
+  }
+
   // Construct the message body
   let request_body = {
     recipient: {
-      id: sender_psid,
+      id: parseInt(sender_psid),
     },
     message: response,
   };
 
+  // Get the Page Access Token
+  const pageData = await getData();
+  const accessToken = pageData?.data[0].access_token;
+  console.log(accessToken);
+
   // Send the HTTP request to the Messenger Platform
-  request(
-    {
-      uri: "https://graph.facebook.com/v19.0/me/messages",
-      qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
-      method: "POST",
-      json: request_body,
-    },
-    (err, res, body) => {
-      if (!err) {
-        console.log("message sent!");
-      } else {
-        console.error("Unable to send message:" + err);
-      }
-    }
-  );
+  axios
+    .post(`https://graph.facebook.com/v19.0/me/messages`, request_body, {
+      params: { access_token: accessToken },
+    })
+    .then(() => console.log("message sent!"))
+    .catch((err) => console.error("Unable to send message:" + err));
+
+  // request(
+  //   {
+  //     uri: "https://graph.facebook.com/v19.0/me/messages",
+  //     qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+  //     method: "POST",
+  //     json: request_body,
+  //   },
+  //   (err, res, body) => {
+  //     if (!err) {
+  //       console.log("message sent!");
+  //     } else {
+  //       console.error("Unable to send message:" + err);
+  //     }
+  //   }
+  // );
 }

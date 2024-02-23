@@ -1,17 +1,15 @@
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 import { redirect } from "next/navigation";
-import { authOptions } from "../utils/authOptions";
-import axios from "axios";
-import { IoIosCloudCircle } from "react-icons/io";
+import { FaUser, FaUsers } from "react-icons/fa";
 import { GoStack } from "react-icons/go";
-import { FaUsers } from "react-icons/fa";
 import { GrLineChart } from "react-icons/gr";
 import { HiMenuAlt1 } from "react-icons/hi";
-import { FaUser } from "react-icons/fa";
-import Link from "next/link";
-import prisma from "@/prisma/client";
+import { IoIosCloudCircle } from "react-icons/io";
+import { authOptions } from "../utils/authOptions";
+import { getData } from "../webhook/getData";
 
-interface PageDataType {
+export interface PageDataType {
   data: [
     {
       access_token: string;
@@ -42,41 +40,7 @@ const AgentDashboardPage = async () => {
     redirect("/login");
   }
 
-  const getUser = async () => {
-    const user = await prisma?.user.findUnique({
-      where: {
-        email: session?.user?.email!,
-      },
-    });
-    return user;
-  };
-
-  const getAccesstoken = async () => {
-    const user = await getUser();
-
-    const accountData = await prisma?.account.findMany({});
-    const userAccount = accountData?.find((acc) => acc.userId === user?.id);
-
-    return userAccount?.access_token;
-  };
-
-  const pageData = async () => {
-    try {
-      const res = await axios.get<PageDataType>(
-        `https://graph.facebook.com/v19.0/me/accounts?access_token=${await getAccesstoken()}`
-      );
-
-      process.env.PAGE_ACCESS_TOKEN = res.data.data[0].access_token;
-      process.env.PAGE_ID = res.data.data[0].id;
-
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const user = await getUser();
-  const pages = await pageData();
+  const pages = await getData();
 
   return (
     <div className="h-screen w-full flex">
