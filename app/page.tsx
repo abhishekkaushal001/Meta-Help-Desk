@@ -12,6 +12,10 @@ export default async function Home() {
 
   const page = await getData();
 
+  // Setting the environment variable
+  process.env.PAGE_ACCESS_TOKEN = page?.data[0].access_token;
+  process.env.PAGE_ID = page?.data[0].id;
+
   return (
     <div className="h-screen flex place-items-center justify-center">
       <div className="bg-white p-10 rounded-2xl">
