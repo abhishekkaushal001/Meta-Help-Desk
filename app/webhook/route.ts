@@ -45,8 +45,11 @@ export async function GET(req: NextRequest) {
     if (mode === "subscribe" && token === process.env.MY_VERIFY_TOKEN) {
       // Respond with the challenge token from the request
       console.log("WEBHOOK_VERIFIED");
-      console.log(challenge);
-      return NextResponse.json(challenge, { status: 200 });
+      const challengeInt = parseInt(challenge!);
+
+      // console.log(challengeInt, typeof challengeInt);
+
+      return NextResponse.json(challengeInt, { status: 200 });
     } else {
       // Respond with '403 Forbidden' if verify tokens do not match
       return NextResponse.json("", { status: 403 });
