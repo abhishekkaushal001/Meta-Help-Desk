@@ -9,6 +9,7 @@ import { GrLineChart } from "react-icons/gr";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
+import prisma from "@/prisma/client";
 
 interface PageDataType {
   data: [
