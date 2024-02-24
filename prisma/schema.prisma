@@ -20,6 +20,30 @@ model AppUser {
   password String
 }
 
+model PageData {
+  id              Int     @id @default(autoincrement())
+  userId          String
+  userEmail       String
+  userAccessToken String? @db.Text
+  pageName        String?
+  pageId          String?
+  pageAccessToken String? @db.Text
+}
+
+model ChatData {
+  id        Int      @id @default(autoincrement())
+  pageId    String
+  senderId  String
+  sendBy    Status
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+}
+
+enum Status {
+  ME
+  USER
+}
+
 model Account {
   id                String  @id @default(cuid())
   userId            String
