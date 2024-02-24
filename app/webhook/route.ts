@@ -32,18 +32,19 @@ export async function POST(req: NextRequest) {
 
       if (webhook_event.message) {
         // Saves the Chat data to database.
-        prisma.chatData
-          .create({
+        try {
+          const chat = await prisma.chatData.create({
             data: {
               pageId: webhook_event.recipient.id.toString(),
               senderId: webhook_event.sender.id.toString(),
               sendBy: "USER",
               message: webhook_event.message.text.toString(),
             },
-          })
-          .then((res) => console.log(res))
-          .catch((err) => console.log(err))
-          .finally(() => console.log("Chat POST done."));
+          });
+          console.log(chat);
+        } catch (error) {
+          console.log(error);
+        }
       } else if (webhook_event.postback) {
         // handlePostback(sender_psid, webhook_event.postback);
       }
