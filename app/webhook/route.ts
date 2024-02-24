@@ -25,11 +25,13 @@ export async function POST(req: NextRequest) {
 
       // Get the sender PSID
       let sender_psid = webhook_event?.sender?.id;
-      console.log("Sender PSID: " + sender_psid, "type:" + typeof sender_psid);
-      console.log(process.env.NODE_ENV);
+      console.log("Sender PSID: " + sender_psid);
 
-      // Saves the Chat data to database.
-      try {
+      // Check if the event is a message or postback and
+      // pass the event to the appropriate handler function
+
+      if (webhook_event.message) {
+        // Saves the Chat data to database.
         prisma.chatData
           .create({
             data: {
@@ -42,18 +44,9 @@ export async function POST(req: NextRequest) {
           .then((res) => console.log(res))
           .catch((err) => console.log(err))
           .finally(() => console.log("Chat POST done."));
-      } catch (error) {
-        console.log(error);
+      } else if (webhook_event.postback) {
+        // handlePostback(sender_psid, webhook_event.postback);
       }
-
-      // Check if the event is a message or postback and
-      // pass the event to the appropriate handler function
-
-      // if (webhook_event.message) {
-      //   handleMessage(sender_psid, webhook_event.message);
-      // } else if (webhook_event.postback) {
-      //   handlePostback(sender_psid, webhook_event.postback);
-      // }
     });
 
     // Return a '200 OK' response to all events
