@@ -1,4 +1,5 @@
 import prisma from "@/prisma/client";
+import axios from "axios";
 import { NextRequest, NextResponse } from "next/server";
 
 interface hook {
@@ -32,19 +33,17 @@ export async function POST(req: NextRequest) {
 
       if (webhook_event.message) {
         // Saves the Chat data to database.
-        try {
-          const chat = await prisma.chatData.create({
-            data: {
-              pageId: webhook_event.recipient.id.toString(),
-              senderId: webhook_event.sender.id.toString(),
-              sendBy: "USER",
-              message: webhook_event.message.text.toString(),
-            },
-          });
-          console.log(chat);
-        } catch (error) {
-          console.log(error);
-        }
+        const data = {
+          pageId: webhook_event.recipient.id.toString(),
+          senderId: webhook_event.sender.id.toString(),
+          sendBy: "USER",
+          message: webhook_event.message.text.toString(),
+        };
+
+        axios
+          .post("https://meta-help-desk.vercel.app/api/webhook/chats", data)
+          .then((res) => console.log(res.data))
+          .catch((err) => console.log(err));
       } else if (webhook_event.postback) {
         // handlePostback(sender_psid, webhook_event.postback);
       }
