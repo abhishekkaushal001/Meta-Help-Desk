@@ -2,7 +2,7 @@ import prisma from "@/prisma/client";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import HomeActions from "./HomeActions";
-import { getData } from "./webhook/getData";
+import { getData } from "./api/webhook/getData";
 
 export default async function Home() {
   const session = await getServerSession();

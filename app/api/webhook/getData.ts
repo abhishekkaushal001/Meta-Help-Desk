@@ -1,8 +1,8 @@
 import prisma from "@/prisma/client";
 import axios from "axios";
 import { getServerSession } from "next-auth";
-import { PageDataType } from "../dashboard/page";
-import { authOptions } from "../utils/authOptions";
+import { PageDataType } from "../../dashboard/page";
+import { authOptions } from "../../utils/authOptions";
 
 export const getData = async () => {
   const session = await getServerSession(authOptions);

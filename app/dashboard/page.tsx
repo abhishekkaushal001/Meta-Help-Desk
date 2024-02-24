@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../utils/authOptions";
-import { getData } from "../webhook/getData";
+import { getData } from "../api/webhook/getData";
 import Dashboard from "./Dashboard";
 import prisma from "@/prisma/client";
 
