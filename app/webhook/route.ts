@@ -23,8 +23,12 @@ export async function POST(req: NextRequest) {
       let webhook_event: hook = entry.messaging[0];
       console.log(webhook_event);
 
+      // Get the sender PSID
+      let sender_psid = webhook_event?.sender?.id;
+      console.log("Sender PSID: " + sender_psid);
+
       // Saves the Chat data to database.
-      await prisma.chatData.create({
+      const chat = await prisma.chatData.create({
         data: {
           pageId: webhook_event.recipient.id,
           senderId: webhook_event.sender.id,
@@ -33,9 +37,7 @@ export async function POST(req: NextRequest) {
         },
       });
 
-      // Get the sender PSID
-      let sender_psid = webhook_event?.sender?.id;
-      console.log("Sender PSID: " + sender_psid);
+      console.log(chat);
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
