@@ -1,4 +1,4 @@
-import prisma from "@/prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 interface hook {
@@ -13,6 +13,8 @@ interface hook {
 }
 
 export const dynamic = "force-dynamic";
+
+const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
   let body = await req.json();
