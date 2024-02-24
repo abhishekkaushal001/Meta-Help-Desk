@@ -28,18 +28,22 @@ export async function POST(req: NextRequest) {
       console.log("Sender PSID: " + sender_psid, "type:" + typeof sender_psid);
 
       // Saves the Chat data to database.
-      prisma.chatData
-        .create({
-          data: {
-            pageId: webhook_event.recipient.id.toString(),
-            senderId: webhook_event.sender.id.toString(),
-            sendBy: "USER",
-            message: webhook_event.message.text.toString(),
-          },
-        })
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err))
-        .finally(() => console.log("Chat POST done."));
+      try {
+        prisma.chatData
+          .create({
+            data: {
+              pageId: webhook_event.recipient.id.toString(),
+              senderId: webhook_event.sender.id.toString(),
+              sendBy: "USER",
+              message: webhook_event.message.text.toString(),
+            },
+          })
+          .then((res) => console.log(res))
+          .catch((err) => console.log(err))
+          .finally(() => console.log("Chat POST done."));
+      } catch (error) {
+        console.log(error);
+      }
 
       // Check if the event is a message or postback and
       // pass the event to the appropriate handler function
