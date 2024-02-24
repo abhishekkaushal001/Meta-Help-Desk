@@ -76,6 +76,8 @@ export async function GET(req: NextRequest) {
 
 async function handleMessage(webhook_event: hook) {
   try {
+    await prisma.$connect();
+    console.log("Prisma connection started.");
     const chat = await prisma.chatData.create({
       data: {
         senderId: webhook_event.sender.id,
