@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
 
       if (webhook_event.message) {
         // Saves the Chat data to database.
-        handleMessage(webhook_event);
+        await handleMessage(webhook_event);
       } else if (webhook_event.postback) {
         // handlePostback(sender_psid, webhook_event.postback);
       }
@@ -73,13 +73,17 @@ export async function GET(req: NextRequest) {
 }
 
 async function handleMessage(webhook_event: hook) {
-  const chat = await prisma.chatData.create({
-    data: {
-      senderId: webhook_event.sender.id,
-      pageId: webhook_event.recipient.id,
-      sendBy: "USER",
-      message: webhook_event.message.text,
-    },
-  });
-  console.log(chat);
+  try {
+    const chat = await prisma.chatData.create({
+      data: {
+        senderId: webhook_event.sender.id,
+        pageId: webhook_event.recipient.id,
+        sendBy: "USER",
+        message: webhook_event.message.text,
+      },
+    });
+    console.log(chat);
+  } catch (error) {
+    console.log(error);
+  }
 }
