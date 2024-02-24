@@ -26,6 +26,7 @@ export async function POST(req: NextRequest) {
       // Get the sender PSID
       let sender_psid = webhook_event?.sender?.id;
       console.log("Sender PSID: " + sender_psid, "type:" + typeof sender_psid);
+      console.log(process.env.NODE_ENV);
 
       // Saves the Chat data to database.
       try {
