@@ -12,6 +12,8 @@ interface hook {
   postback: { payload: string };
 }
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: NextRequest) {
   let body = await req.json();
 
@@ -32,25 +34,14 @@ export async function POST(req: NextRequest) {
 
       if (webhook_event.message) {
         // Saves the Chat data to database.
-        const chat = await prisma.chatData.create({
-          data: {
-            senderId: sender_psid,
-            pageId: webhook_event.recipient.id,
-            sendBy: "USER",
-            message: webhook_event.message.text,
-          },
-        });
-        if (!chat) {
-          return NextResponse.json("", { status: 500 });
-        }
-        return NextResponse.json("EVENT_RECEIVED", { status: 200 });
+        handleMessage(webhook_event);
       } else if (webhook_event.postback) {
         // handlePostback(sender_psid, webhook_event.postback);
       }
     });
 
     // Return a '200 OK' response to all events
-    // return NextResponse.json("EVENT_RECEIVED", { status: 200 });
+    return NextResponse.json("EVENT_RECEIVED", { status: 200 });
   } else {
     // Return a '404 Not Found' if event is not from a page subscription
     return NextResponse.json("", { status: 404 });
@@ -79,4 +70,16 @@ export async function GET(req: NextRequest) {
       return NextResponse.json("", { status: 403 });
     }
   }
+}
+
+async function handleMessage(webhook_event: hook) {
+  const chat = await prisma.chatData.create({
+    data: {
+      senderId: webhook_event.sender.id,
+      pageId: webhook_event.recipient.id,
+      sendBy: "USER",
+      message: webhook_event.message.text,
+    },
+  });
+  console.log(chat);
 }
