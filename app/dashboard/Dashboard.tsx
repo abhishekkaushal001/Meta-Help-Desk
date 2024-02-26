@@ -48,7 +48,7 @@ const Dashboard = ({ page }: { page: PageData }) => {
 
       {!showChats && <DashboardBlankPage page={page} />}
 
-      {showChats && <ChatPage />}
+      {showChats && <ChatPage page={page} />}
     </div>
   );
 };

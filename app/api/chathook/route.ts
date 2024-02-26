@@ -1,5 +1,4 @@
 import { authOptions } from "@/app/utils/authOptions";
-import { getData } from "@/app/api/webhook/getData";
 import prisma from "@/prisma/client";
 import axios from "axios";
 import { getServerSession } from "next-auth";
@@ -11,7 +10,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect("/login", { status: 400 });
   }
 
-  const page = await getData();
+  const page = await prisma.pageData.findFirst({
+    where: {
+      userEmail: session.user?.email!,
+    },
+  });
 
   const chats = await prisma.chatData.findMany({
     where: {
@@ -29,7 +32,11 @@ export async function POST(req: NextRequest) {
   }
 
   const data = await req.json();
-  const page = await getData();
+  const page = await prisma.pageData.findFirst({
+    where: {
+      userEmail: session.user?.email!,
+    },
+  });
 
   const response = {
     text: data.message,
