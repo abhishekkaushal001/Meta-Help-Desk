@@ -1,9 +1,8 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../utils/authOptions";
-import { getData } from "../api/webhook/getData";
+import getPage from "../utils/getPage";
 import Dashboard from "./Dashboard";
-import prisma from "@/prisma/client";
 
 export interface PageDataType {
   data: [
@@ -36,18 +35,9 @@ const AgentDashboardPage = async () => {
     redirect("/login");
   }
 
-  const page = await prisma.pageData.findMany({
-    where: {
-      userEmail: session.user?.email!,
-    },
-  });
+  const page = await getPage(session.user?.email!);
 
-  let pageData;
-  if (page.length === 0) {
-    pageData = await getData();
-  }
-
-  return <Dashboard page={page.length === 0 ? pageData! : page[0]} />;
+  return <Dashboard page={page} />;
 };
 
 export default AgentDashboardPage;

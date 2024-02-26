@@ -1,22 +1,20 @@
 import prisma from "@/prisma/client";
 import axios from "axios";
-import { getServerSession } from "next-auth";
 import { PageDataType } from "../../dashboard/page";
-import { authOptions } from "../../utils/authOptions";
 
-export const getData = async () => {
-  const session = await getServerSession(authOptions);
-  if (!session) return;
-
+export const getData = async (email: string) => {
   const user = await prisma.user.findUnique({
     where: {
-      email: session?.user?.email!,
+      email,
     },
   });
 
-  const accountData = await prisma.account.findMany({});
-  const userAccount = accountData?.find((acc) => acc.userId === user?.id);
-  const userToken = userAccount?.access_token;
+  const accountData = await prisma.account.findFirst({
+    where: {
+      userId: user?.id,
+    },
+  });
+  const userToken = accountData?.access_token;
 
   let data;
   try {

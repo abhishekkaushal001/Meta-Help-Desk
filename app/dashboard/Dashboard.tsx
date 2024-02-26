@@ -1,14 +1,14 @@
 "use client";
 
+import { PageData } from "@prisma/client";
 import Link from "next/link";
+import { useState } from "react";
 import { FaUser, FaUsers } from "react-icons/fa";
 import { GoStack } from "react-icons/go";
 import { GrLineChart } from "react-icons/gr";
 import { IoIosCloudCircle } from "react-icons/io";
 import ChatPage from "./ChatPage";
-import { useState } from "react";
 import DashboardBlankPage from "./DashboardBlankPage";
-import { PageData } from "@prisma/client";
 
 const Dashboard = ({ page }: { page: PageData }) => {
   const [showChats, setShowChats] = useState(false);
