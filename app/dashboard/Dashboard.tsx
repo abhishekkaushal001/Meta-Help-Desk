@@ -23,7 +23,9 @@ const Dashboard = ({ page }: { page: PageData }) => {
             </div>
           </Link>
           <Link href="" onClick={() => setShowChats(!showChats)}>
-            <div className="p-7 hover:bg-sky-600">
+            <div
+              className={showChats ? "p-7 bg-sky-600" : "p-7 hover:bg-sky-600"}
+            >
               <GoStack className="w-6 h-6 text-white" />
             </div>
           </Link>
