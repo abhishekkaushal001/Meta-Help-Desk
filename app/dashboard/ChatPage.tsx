@@ -1,22 +1,31 @@
 import { PageData } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FaUser } from "react-icons/fa6";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { MdRefresh } from "react-icons/md";
 import useChats from "../utils/hooks/useChats";
+import { IoIosSend } from "react-icons/io";
+import axios from "axios";
 
 const ChatPage = ({ page }: { page: PageData }) => {
   const router = useRouter();
   const [user, setUser] = useState("");
   const [client, setClient] = useState("");
+  const msgRef = useRef<HTMLInputElement>(null);
 
   const { data, isLoading, error, isFetched } = useChats(page);
 
   const getNamechars = (name: string): string => {
     const nameArr = name.split(" ").map((n) => n.charAt(0));
     return nameArr[0] + nameArr[1];
+  };
+
+  const sendMessage = () => {
+    if (msgRef.current) {
+      console.log(msgRef.current.value);
+    }
   };
 
   return (
@@ -88,7 +97,10 @@ const ChatPage = ({ page }: { page: PageData }) => {
             ?.messages.data.map((msg) => (
               <>
                 {msg.from.id === client && (
-                  <div className="flex py-3 px-4 align-bottom min-w-fit">
+                  <div
+                    key={msg.id}
+                    className="flex py-3 px-4 align-bottom min-w-fit"
+                  >
                     <span className="p-2 rounded-full bg-gray-800 mt-auto">
                       <FaUser className="w-5 h-5 text-white" />
                     </span>
@@ -100,7 +112,10 @@ const ChatPage = ({ page }: { page: PageData }) => {
                   </div>
                 )}
                 {msg.from.id !== client && (
-                  <div className="flex justify-end py-3 px-4 align-bottom min-w-fit">
+                  <div
+                    key={msg.id}
+                    className="flex justify-end py-3 px-4 align-bottom min-w-fit"
+                  >
                     <div className="chat chat-end pr-2">
                       <div className="chat-bubble font-medium text-white min-w-fit">
                         {msg.message}
@@ -117,7 +132,9 @@ const ChatPage = ({ page }: { page: PageData }) => {
 
         <div className="flex px-4">
           <input
+            ref={msgRef}
             type="text"
+            name="message"
             placeholder={
               user
                 ? `Message ${
@@ -128,6 +145,12 @@ const ChatPage = ({ page }: { page: PageData }) => {
             }
             className="input input-bordered input-primary w-full"
           />
+          <button
+            className="btn mx-2 bg-sky-400 hover:bg-sky-500"
+            onClick={() => sendMessage()}
+          >
+            <IoIosSend className="w-7 h-7" />
+          </button>
         </div>
       </div>
 
