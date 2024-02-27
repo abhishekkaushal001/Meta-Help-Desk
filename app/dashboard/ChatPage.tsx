@@ -14,6 +14,11 @@ const ChatPage = ({ page }: { page: PageData }) => {
 
   const { data, isLoading, error, isFetched } = useChats(page);
 
+  const getNamechars = (name: string): string => {
+    const nameArr = name.split(" ").map((n) => n.charAt(0));
+    return nameArr[0] + nameArr[1];
+  };
+
   return (
     <div className="grid grid-cols-5 w-full">
       <div className="col-span-1 bg-white pb-5">
@@ -59,7 +64,7 @@ const ChatPage = ({ page }: { page: PageData }) => {
         </div>
       </div>
 
-      <div className="col-span-3 bg-gray-200 border-[.5px] border-gray-200">
+      <div className="col-span-3 bg-stone-200 border-x-[.5px] border-gray-300">
         <div className="flex bg-white align-middle px-3 py-4 border-b-[0.5px] border-gray-300">
           {!user && (
             <h2 className="font-bold text-xl pl-3 text-gray-300">Messages</h2>
@@ -71,29 +76,31 @@ const ChatPage = ({ page }: { page: PageData }) => {
           )}
         </div>
 
-        <div className="h-[560px] overflow-y-scroll py-3">
+        <div className="h-[560px] flex flex-col-reverse overflow-y-scroll py-3 px-2">
           {data?.data
             .find((d) => d.id === user)
             ?.messages.data.map((msg) => (
               <>
                 {msg.from.id === client && (
                   <div className="flex py-3 px-4 align-bottom min-w-fit">
-                    <span className="p-2 rounded-full bg-gray-100 mt-auto">
-                      <FaUser className="w-5 h-5 text-black" />
+                    <span className="p-2 rounded-full bg-gray-800 mt-auto">
+                      <FaUser className="w-5 h-5 text-white" />
                     </span>
                     <div className="chat chat-start pl-2">
-                      <div className="chat-bubble min-w-fit">{msg.message}</div>
+                      <div className="chat-bubble min-w-fit bg-white text-gray-900 font-medium">
+                        {msg.message}
+                      </div>
                     </div>
                   </div>
                 )}
                 {msg.from.id !== client && (
                   <div className="flex justify-end py-3 px-4 align-bottom min-w-fit">
                     <div className="chat chat-end pr-2">
-                      <div className="chat-bubble chat-bubble-primary min-w-fit">
+                      <div className="chat-bubble font-medium text-white min-w-fit">
                         {msg.message}
                       </div>
                     </div>
-                    <span className="p-2 rounded-full bg-gray-100 mt-auto">
+                    <span className="p-2 rounded-full bg-white mt-auto">
                       <FaUser className="w-5 h-5 text-black" />
                     </span>
                   </div>
@@ -102,7 +109,7 @@ const ChatPage = ({ page }: { page: PageData }) => {
             ))}
         </div>
 
-        <div className="px-4">
+        <div className="flex px-4">
           <input
             type="text"
             placeholder={`Message ${
@@ -113,7 +120,42 @@ const ChatPage = ({ page }: { page: PageData }) => {
         </div>
       </div>
 
-      <div className="col-span-1 bg-white">user details</div>
+      <div className="col-span-1 bg-white h-screen overflow-hidden">
+        <div className="h-[40%] flex flex-col py-3 w-full place-items-center bg-white bordr-b-[0.5px] border-gray-300">
+          {user && (
+            <div className="avatar online placeholder mt-7">
+              <div className="bg-neutral text-neutral-content rounded-full w-20">
+                <span className="text-4xl">
+                  {getNamechars(
+                    data?.data.find((d) => d.id === user)?.participants.data[0]
+                      .name!
+                  )}
+                </span>
+              </div>
+            </div>
+          )}
+          {!user && (
+            <div className="avatar placeholder mt-7">
+              <div className="bg-gray-100 text-neutral-content rounded-full w-20"></div>
+            </div>
+          )}
+          <div className="">
+            {user && (
+              <h4 className="text-2xl mt-3 font-medium">
+                {
+                  data?.data.find((d) => d.id === user)?.participants.data[0]
+                    .name
+                }
+              </h4>
+            )}
+            {!user && (
+              <div className="mt-4 bg-gray-100 w-40 rounded-xl h-8"></div>
+            )}
+          </div>
+        </div>
+
+        <div className="bg-gray-200 h-full"></div>
+      </div>
     </div>
   );
 };
