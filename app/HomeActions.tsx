@@ -3,7 +3,7 @@
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 
-const HomeActions = ({ page }: { page: string }) => {
+const HomeActions = ({ page }: { page?: string }) => {
   const { status, data: session } = useSession();
 
   return (
