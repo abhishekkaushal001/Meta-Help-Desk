@@ -1,11 +1,11 @@
 import { PageData } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { FaUser } from "react-icons/fa6";
 import { HiMenuAlt1 } from "react-icons/hi";
 import { MdRefresh } from "react-icons/md";
 import useChats from "../utils/hooks/useChats";
-import { useState } from "react";
-import { FaUser } from "react-icons/fa6";
 
 const ChatPage = ({ page }: { page: PageData }) => {
   const router = useRouter();
@@ -51,7 +51,13 @@ const ChatPage = ({ page }: { page: PageData }) => {
                 setClient(data.participants.data[0].id);
               }}
             >
-              <div className="py-4 px-3 bg-gray-100 flex flex-col border-y-[1px] border-gray-300">
+              <div
+                className={
+                  user
+                    ? "py-4 px-3 flex flex-col border-y-[1px] border-gray-300 bg-gray-100"
+                    : "py-4 px-3 flex flex-col border-y-[1px] border-gray-300  bg-white hover:bg-gray-100"
+                }
+              >
                 <p className="text-base text-gray-900 font-medium pl-1">
                   {data.participants.data[0].name}
                 </p>
