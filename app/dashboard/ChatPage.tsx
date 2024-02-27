@@ -197,7 +197,7 @@ const ChatPage = ({ page }: { page: PageData }) => {
           <div className="col-span-1 bg-white h-screen overflow-hidden">
             <div className="h-[40%] flex flex-col py-3 w-full place-items-center bg-white bordr-b-[0.5px] border-gray-300">
               {user && (
-                <div className="avatar online placeholder mt-7">
+                <div className="avatar placeholder mt-7 ring ring-primary ring-offset-base-100 ring-offset-2 rounded-full">
                   <div className="bg-neutral text-neutral-content rounded-full w-20">
                     <span className="text-4xl">
                       {getNamechars(
