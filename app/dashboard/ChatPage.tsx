@@ -23,8 +23,23 @@ const ChatPage = ({ page }: { page: PageData }) => {
   };
 
   const sendMessage = () => {
-    if (msgRef.current) {
-      console.log(msgRef.current.value);
+    if (user && msgRef.current) {
+      const message = {
+        recipient: {
+          id: client,
+        },
+        message: {
+          text: msgRef.current.value,
+        },
+      };
+
+      axios
+        .post(
+          `https://graph.facebook.com/v19.0/${page.pageId}/messages?access_token=${page.pageAccessToken}`,
+          message
+        )
+        .then(() => router.refresh())
+        .catch((err) => console.log(err));
     }
   };
 
