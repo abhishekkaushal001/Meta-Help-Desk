@@ -13,6 +13,7 @@ const ChatPage = ({ page }: { page: PageData }) => {
   const router = useRouter();
   const [user, setUser] = useState("");
   const [client, setClient] = useState("");
+  const [sendingMsg, setSendingMsg] = useState(false);
   const msgRef = useRef<HTMLInputElement>(null);
 
   const { data, isLoading, error, isFetched } = useChats(page);
@@ -23,7 +24,8 @@ const ChatPage = ({ page }: { page: PageData }) => {
   };
 
   const sendMessage = () => {
-    if (user && msgRef.current) {
+    if (user && msgRef.current && msgRef.current.value.length !== 0) {
+      setSendingMsg(true);
       const message = {
         recipient: {
           id: client,
@@ -38,8 +40,14 @@ const ChatPage = ({ page }: { page: PageData }) => {
           `https://graph.facebook.com/v19.0/${page.pageId}/messages?access_token=${page.pageAccessToken}`,
           message
         )
-        .then(() => router.refresh())
-        .catch((err) => console.log(err));
+        .then(() => {
+          router.refresh();
+          setSendingMsg(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setSendingMsg(false);
+        });
     }
   };
 
@@ -162,9 +170,13 @@ const ChatPage = ({ page }: { page: PageData }) => {
           />
           <button
             className="btn mx-2 bg-sky-400 hover:bg-sky-500"
+            disabled={sendingMsg}
             onClick={() => sendMessage()}
           >
             <IoIosSend className="w-7 h-7" />
+            {sendingMsg && (
+              <span className="loading loading-spinner loading-sm"></span>
+            )}
           </button>
         </div>
       </div>
