@@ -112,9 +112,14 @@ const ChatPage = ({ page }: { page: PageData }) => {
         <div className="flex px-4">
           <input
             type="text"
-            placeholder={`Message ${
-              data?.data.find((d) => d.id === user)?.participants.data[0].name
-            }`}
+            placeholder={
+              user
+                ? `Message ${
+                    data?.data.find((d) => d.id === user)?.participants.data[0]
+                      .name
+                  }`
+                : "Message"
+            }
             className="input input-bordered input-primary w-full"
           />
         </div>
@@ -152,9 +157,63 @@ const ChatPage = ({ page }: { page: PageData }) => {
               <div className="mt-4 bg-gray-100 w-40 rounded-xl h-8"></div>
             )}
           </div>
+
+          {user && (
+            <>
+              <div className="mt-1">
+                <p className="text-sm font-medium text-gray-400">
+                  &#9679; offline
+                </p>
+              </div>
+              <div className="flex justify-center space-x-4 mt-4">
+                <button className="btn btn-sm">Call</button>
+                <button className="btn btn-sm">Profile</button>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="bg-gray-200 h-full"></div>
+        <div className="bg-blue-50 h-full px-2 py-4">
+          {user && (
+            <div className="bg-white rounded-lg p-3 border-[0.5px] border-gray-300">
+              <h2 className="font-semibold mb-2">Customer details</h2>
+              <div className="flex justify-between text-sm py-1">
+                <p className="text-gray-400">Email</p>
+                <p className="text-xs w-1/2 text-balance overflow-hidden text-right font-semibold text-gray-800">
+                  {data?.data
+                    .find((d) => d.id === user)
+                    ?.participants.data[0].email.slice(0, 12)}
+                  ...
+                </p>
+              </div>
+              <div className="flex justify-between text-sm py-1">
+                <p className="text-gray-400">First Name</p>
+                <p className="w-1/2 text-balance overflow-hidden text-right font-semibold text-gray-800">
+                  {
+                    data?.data
+                      .find((d) => d.id === user)
+                      ?.participants.data[0].name.split(" ")[0]
+                  }
+                </p>
+              </div>
+              <div className="flex justify-between text-sm py-1">
+                <p className="text-gray-400">Last Name</p>
+                <p className="w-1/2 text-balance overflow-hidden text-right font-semibold text-gray-800">
+                  {
+                    data?.data
+                      .find((d) => d.id === user)
+                      ?.participants.data[0].name.split(" ")[1]
+                  }
+                </p>
+              </div>
+              <Link href="">
+                <p className="text-xs font-semibold text-blue-500 pt-2 ">
+                  View more details
+                </p>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
