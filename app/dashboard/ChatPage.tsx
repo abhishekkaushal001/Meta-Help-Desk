@@ -82,7 +82,7 @@ const ChatPage = ({ page }: { page: PageData }) => {
           )}
         </div>
 
-        <div className="h-[560px] flex flex-col-reverse overflow-y-scroll py-3 px-2">
+        <div className="h-[625px] flex flex-col-reverse overflow-y-scroll py-3 px-2">
           {data?.data
             .find((d) => d.id === user)
             ?.messages.data.map((msg) => (
